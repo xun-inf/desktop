@@ -1,0 +1,26 @@
+#include <windows.h>
+1 ICON "@CMAKE_CURRENT_SOURCE_DIR@/../config/app.ico"
+101 RCDATA "@SETUP_PAYLOAD@"
+1 VERSIONINFO
+ FILEVERSION @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+ PRODUCTVERSION @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904B0"
+    BEGIN
+      VALUE "CompanyName", "ZXB"
+      VALUE "FileDescription", "LIVE Streamer 安装程序"
+      VALUE "ProductName", "LIVE Streamer"
+      VALUE "ProductVersion", "@PROJECT_VERSION@"
+      VALUE "FileVersion", "@PROJECT_VERSION@"
+      VALUE "OriginalFilename", "live-streamer-@PROJECT_VERSION@-windows-x64-setup.exe"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1200
+  END
+END

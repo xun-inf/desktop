@@ -2,6 +2,7 @@
 // 命令行参数一律优先，开发和测试脚本靠它覆盖。
 
 import path from 'node:path';
+import { app } from 'electron';
 
 export interface AppPaths {
   // 产物目录：以 UI 进程 exe 所在目录为基准（开发期 electron.exe，产物 live-streamer.exe）
@@ -30,7 +31,8 @@ export function argValue(
 
 export function resolvePaths(): AppPaths {
   const appDir = path.dirname(process.execPath);
-  const mainLogPath = argValue('main-log') || path.join(appDir, 'logs', 'main.log');
+  const mainLogPath = argValue('main-log') || path.join(
+    app.isPackaged ? app.getPath('userData') : appDir, 'logs', 'main.log');
   return {
     appDir,
     configDir: argValue('config-dir') || path.join(appDir, 'config'),
