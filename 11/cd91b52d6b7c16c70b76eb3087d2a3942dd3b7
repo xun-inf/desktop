@@ -1,0 +1,336 @@
+.gitignore
+  s_86d200683c08b7::t_048da069c706c5 27-30
+README.md
+  s_e365e0923fd2ce::t_1bc736dd36345c 1,3,5,7,9-13,15
+build-win-x84_64.bat
+  s_86d200683c08b7::t_e481dc53646241 2,33
+core/CMakeLists.txt
+  s_2a7c40d9bf9780::t_4c012da5163aee 3-5,7,10,15,20,22,27,31,33-35,37,43-47,50-56
+core/cmake/FlatBuffers.cmake
+  s_86d200683c08b7::t_b7738e4a170ddd 5,7,9,12,14,17-20,22-23,26,31,33,35,37-38,40-42,49,55,67,71-73,77,82,84,86,88-89,91-93,100,111,114,117-119
+core/cmake/Schemas.cmake
+  s_968ac81cef78da::t_9c0a5851e3e491 3-8,10,12-19,22-27
+core/cmake/Spdlog.cmake
+  s_86d200683c08b7::t_2c18d28f376f24 5,7,10,13,18,32,34,38,41,43,45-46,48
+core/common/protos/native_window_service.h
+  s_968ac81cef78da::t_72d81e8713bedc 1-926
+core/common/protos/schema_traits.h
+  s_968ac81cef78da::t_5e1ebaafc9b0c0 1-71
+core/common/protos/service.h
+  s_968ac81cef78da::t_c1b76db7a24dbb 1-777
+core/common/protos/stream_preview_service.h
+  s_968ac81cef78da::t_64b460cf61b32c 1-569
+core/media-service/CMakeLists.txt
+  s_968ac81cef78da::t_fea633b3719bce 1,5-6,8,10-17,21,27-28,35,37-40,44
+core/media-service/include/application.h
+  s_968ac81cef78da::t_57e4479e67fe19 1,4-6,8-10,42,44,47,60,65-67
+core/media-service/include/config.h
+  s_de1379710453d6::t_2349074e4b33cd 4,19-39,43-60
+core/media-service/include/ipc_server.h
+  s_968ac81cef78da::t_85c50e1e866a79 1-62
+core/media-service/include/service.h
+  s_968ac81cef78da::t_44cf0a4411ded3 1-158
+core/media-service/include/service_registry.h
+  s_968ac81cef78da::t_61245144c9e761 1-40
+core/media-service/src/application.cpp
+  s_968ac81cef78da::t_9e67cc6825716b 1,4,8-11,54-57,59,62-65,98,100-103,105
+core/media-service/src/base/config.cpp
+  s_de1379710453d6::t_a51b876902da45 2,4-8,24-69,78-118
+core/media-service/src/base/event_loop.cpp
+  s_5354ed16d5d70b::t_63b519599552dd 1-2,4,6-7,10-14,17-19,22-24,27-29,32-34,36-39
+core/media-service/src/base/ipc_server.cpp
+  s_968ac81cef78da::t_eb07b515b5ab69 1-230
+core/media-service/src/base/ipc_server_p.h
+  s_968ac81cef78da::t_9f7328d541865e 1-66
+core/media-service/src/base/platform/win/event_loop_p.cpp
+  s_5354ed16d5d70b::t_2471dd9b775ab4 1-347
+core/media-service/src/base/platform/win/ipc_server_p.cpp
+  s_843c6c457d16bf::t_b4425bc6feaada 1-449
+core/media-service/src/base/service_registry.cpp
+  s_968ac81cef78da::t_159e643c700cc8 1-22,24-27,29-35,37-53,56-71
+core/media-service/src/main.cpp
+  s_2a7c40d9bf9780::t_6fdb529edaabf3 19,28,40,52
+core/media-service/src/services/native_window/native_window.cpp
+  s_5354ed16d5d70b::t_3af88413c9b3c3 1-33
+core/media-service/src/services/native_window/native_window.h
+  s_433fbf492f80b8::t_bd7788beb852c3 1-38
+core/media-service/src/services/native_window/native_window_p.h
+  s_433fbf492f80b8::t_d533fbe98ce8bd 1-35
+core/media-service/src/services/native_window/native_window_service.cpp
+  s_968ac81cef78da::t_c5c3b788cfb653 1-245
+core/media-service/src/services/native_window/native_window_service.h
+  s_968ac81cef78da::t_0d6b80dbaa4ae5 1-70
+core/media-service/src/services/native_window/platform/win/native_window_p.cpp
+  s_5354ed16d5d70b::t_eb91253f0575fb 1-201
+core/media-service/src/services/register.cpp
+  s_968ac81cef78da::t_1ff15c8dae6207 1-56
+core/media-service/src/services/register.h
+  s_968ac81cef78da::t_0785e264f5fd06 1-16
+core/media-service/src/services/session/session_service.cpp
+  s_968ac81cef78da::t_c06cd6173ae24b 1-57
+core/media-service/src/services/session/session_service.h
+  s_968ac81cef78da::t_38bd00c3e696fa 1-24
+core/media-service/src/services/stream_preview/framebuffer.cpp
+  s_86d200683c08b7::t_208ae36bf3b763 1-100
+core/media-service/src/services/stream_preview/framebuffer.h
+  s_5354ed16d5d70b::t_0a6a09f113dbb1 1-16
+core/media-service/src/services/stream_preview/gpudevice.h
+  s_5354ed16d5d70b::t_db394ca50c4a0b 1-20
+core/media-service/src/services/stream_preview/platform/win/gpudevice.cpp
+  s_843c6c457d16bf::t_45c467fabf8ef4 1-342
+core/media-service/src/services/stream_preview/stream_preview.cpp
+  s_5354ed16d5d70b::t_27e3b81d6047e6 1-218
+core/media-service/src/services/stream_preview/stream_preview.h
+  s_2a7c40d9bf9780::t_713318f9b8e400 1-57
+core/media-service/src/services/stream_preview/stream_preview_p.h
+  s_5354ed16d5d70b::t_0468784efaf102 1-35
+core/media-service/src/services/stream_preview/stream_preview_service.cpp
+  s_968ac81cef78da::t_156f79204e381b 1-15,17,19-90,92-208,210-217,219-225,227-247,249-264,266-277,279-283,285-290
+core/media-service/src/services/stream_preview/stream_preview_service.h
+  s_968ac81cef78da::t_b6e2259abe7874 1-82
+core/node-bizmodules/CMakeLists.txt
+  s_e365e0923fd2ce::t_2cea833b29351f 1-36
+core/node-bizmodules/README.md
+  s_e365e0923fd2ce::t_d6167624924cdc 1-72
+core/node-bizmodules/index.d.ts
+  s_e365e0923fd2ce::t_8023f36ccb2037 1-21
+core/node-bizmodules/src/addon.cpp
+  s_e365e0923fd2ce::t_227be15a4d1a25 1-117
+core/node-bizmodules/src/bindings/napi_util.cpp
+  s_e365e0923fd2ce::t_d55db2d0eae612 1-104
+core/node-bizmodules/src/bindings/napi_util.h
+  s_e365e0923fd2ce::t_a2e7ed1fecfa5a 1-25
+core/node-bizmodules/src/modules/test/test_module.cpp
+  s_e365e0923fd2ce::t_3d5520feb6db2b 1-134
+core/node-bizmodules/src/modules/test/test_module.h
+  s_e365e0923fd2ce::t_dc1f9d74678b24 1-19
+core/node-bizmodules/src/runtime/module.cpp
+  s_e365e0923fd2ce::t_22c3d053892bb2 1-80
+core/node-bizmodules/src/runtime/module.h
+  s_e365e0923fd2ce::t_d4b03570065863 1-46
+core/node-bizmodules/src/runtime/module_host.cpp
+  s_e365e0923fd2ce::t_1d7a2849a15464 1-3,5-68
+core/node-bizmodules/src/runtime/module_host.h
+  s_e365e0923fd2ce::t_aa3e2c90a44f88 1-22
+core/node-bizmodules/src/runtime/module_registry.cpp
+  s_e365e0923fd2ce::t_18740458fe890f 1-38
+core/node-bizmodules/src/runtime/module_registry.h
+  s_e365e0923fd2ce::t_f32f79410e7a83 1-18
+core/node-media-service/CMakeLists.txt
+  s_968ac81cef78da::t_9413e3914e3aeb 1-18,20-47,50-56
+core/node-media-service/README.md
+  s_968ac81cef78da::t_170f30cd8a9946 1-105
+core/node-media-service/index.d.ts
+  s_968ac81cef78da::t_9ef611f0872a60 1-81
+core/node-media-service/src/addon.cpp
+  s_2a7c40d9bf9780::t_974929b77b11b3 1-147
+core/node-media-service/src/runtime/napi_util.cpp
+  s_968ac81cef78da::t_09b98262f8e29e 1-275
+core/node-media-service/src/runtime/napi_util.h
+  s_968ac81cef78da::t_441a2b58f65599 1-70
+core/node-media-service/src/runtime/service_host.cpp
+  s_e365e0923fd2ce::t_76ed03a2f764cf 1-543
+core/node-media-service/src/runtime/service_host.h
+  s_968ac81cef78da::t_87f004c0fa2c17 1-108
+core/node-media-service/src/runtime/transport.cpp
+  s_968ac81cef78da::t_960985d50d749e 1-467
+core/node-media-service/src/runtime/transport.h
+  s_968ac81cef78da::t_cee91cbbc06653 1-121
+core/node-media-service/src/services/native_window_service.cpp
+  s_968ac81cef78da::t_a6f7b5daf34898 1-254
+core/node-media-service/src/services/native_window_service.h
+  s_968ac81cef78da::t_ee1746f2c00e65 1-39
+core/node-media-service/src/services/service_proxy.h
+  s_9297f10ab8e875::t_0a9a9ff2ef6bfa 1-33
+core/node-media-service/src/services/service_registry.cpp
+  s_968ac81cef78da::t_8bd3178682d575 1-38,40-79
+core/node-media-service/src/services/service_registry.h
+  s_968ac81cef78da::t_aadd0b30f5d96c 1-32
+core/node-media-service/src/services/stream_preview_service.cpp
+  s_968ac81cef78da::t_fc802bc86141a7 1-30,32-67,69-100,102-105,107-133,135-138,140-163,165-261,264
+core/node-media-service/src/services/stream_preview_service.h
+  s_968ac81cef78da::t_b3e74bb7492d2f 1-42
+core/node-media-service/src/texture-handle/texture_handle.cpp
+  s_9297f10ab8e875::t_1ad57bedc9f2d7 1-2,8-9,84,93-94
+core/node-media-service/src/texture-handle/texture_handle.h
+  s_9297f10ab8e875::t_c7c9a1328c5cba 1-10
+core/schemas/generate.py
+  s_968ac81cef78da::t_e5c25478c172ea 1-880
+core/schemas/native_window_service.fbs
+  s_2a7c40d9bf9780::t_4130cc2234775d 1-46
+core/schemas/service.fbs
+  s_968ac81cef78da::t_acc1b616a230f9 1,3,5-9,11-19,22-29,32-36,39-45,47-59
+core/schemas/stream_preview_service.fbs
+  s_2a7c40d9bf9780::t_dbc744cf53f343 1-3,5-9,13,15-17,19-23,25-27,29-32
+core/utils/CMakeLists.txt
+  s_86d200683c08b7::t_a1043320085e65 9
+core/utils/include/utils/stringutil.h
+  s_86d200683c08b7::t_1e2e918a8b26bc 8-13
+core/utils/src/logger.cpp
+  s_86d200683c08b7::t_a46fa2f9f790ae 2,6-7,72,76-79,84-85,87-98,101,114-118,120,123,139
+core/utils/src/stringutil.cpp
+  s_86d200683c08b7::t_b16d9bf2c1094a 11-12,17-68,101
+frontend/package-lock.json
+  s_86d200683c08b7::t_4df22b81f312b4 2-3,8-9,11,13-14,17-26,59-61,358-360,363,386-392,394,396-397,400,403-409,417,420-426,428-432,434,437-443,445-449,451,454-460,462-466,468,471-477,479,481-483,485,488-494,496,498-500,502,505-511,513-517,519,522-528,530-534,536,539-545,547-551,553,556-562,564,566-570,573-579,581-585,587,590-596,598-602,604,607-613,615-619,621,624-630,632-636,638,641,643-647,649-653,655,658-664,666-670,672,675-681,683-687,689,692-698,700-706,709-715,717-724,726-729,732-734,736-753,756-759,763-766,768-770,772,774-777,780-783,785,787,790-794,796-798,801-802,805,808-811,813-814,816-817,820-823,827,829-835,838-847,849,851-856,859-863,1062-1063,1065,1068-1069,1072-1078,1080-1083,1085-1087,1089-1093,1096-1102,1104-1108,1110,1113-1114,1117-1123,1125-1129,1131-1135,1138-1142,1144-1147,1149-1154,1156-1157,1159-1160,1184-1186,1204,1230-1234,1236,1238-1239,1334-1336,1340,1343-1365,1369-1371,1379-1381
+frontend/package.json
+  s_e365e0923fd2ce::t_099819757446d9 2-3,8-9,11-13,15,17-18,21-27
+frontend/src/app/app.tsx
+  s_de1379710453d6::t_bf087d73b640cc 4,6-8,13,16,20,22
+frontend/src/app/components/BrowserView/index.tsx
+  s_968ac81cef78da::t_d8c3a488691936 3-4,8,10-11,13-18,20-25,27-38,40,42-44,46-47,49
+frontend/src/app/components/StreamPreview/index.tsx
+  s_968ac81cef78da::t_52dbaef2f41bda 19,38,41
+frontend/src/app/components/StreamPreview/streamPreview.ts
+  s_968ac81cef78da::t_2919a6ace70806 1,6,30,139,141-143,146,149,152-156,162,164-165,180,182-185
+frontend/src/app/components/ui/LanguageField.tsx
+  s_968ac81cef78da::t_e11180f92f1d6e 1-35
+frontend/src/app/hooks/useMediaStatus.ts
+  s_968ac81cef78da::t_6b99aff566bb22 2,4-6,9-11
+frontend/src/app/hooks/useWindowControls.ts
+  s_968ac81cef78da::t_034ea44e086eed 2-5,7,10-13
+frontend/src/app/locales/index.tsx
+  s_968ac81cef78da::t_f4679f1f814aa0 1-66
+frontend/src/app/main.html
+  s_86d200683c08b7::t_a629c764ee2e93 10
+frontend/src/app/pages/Main/Workspace.tsx
+  s_968ac81cef78da::t_e415f429594e45 1,3-6,9-12,14-17,19-25,27-28,31-57
+frontend/src/app/pages/Main/index.tsx
+  s_968ac81cef78da::t_d7762506a74937 1-12
+frontend/src/app/pages/Main/workspace.css
+  s_968ac81cef78da::t_79b402ef5eaaaf 1-16
+frontend/src/app/pages/SecondScreen/index.tsx
+  s_968ac81cef78da::t_2b0fc798b7b716 2-6,11,13-15,18-19,22-23,25-26
+frontend/src/app/pages/Settings/index.tsx
+  s_968ac81cef78da::t_854d7182999ca6 2-5,7-11,15,17-19,22-23,26-36
+frontend/src/app/services/windows.ts
+  s_968ac81cef78da::t_f16868a4084daf 1-12
+frontend/src/app/shared.ts
+  s_968ac81cef78da::t_4faae7f64e21d8 1-2
+frontend/src/app/styles.css
+  s_968ac81cef78da::t_712bf004229340 85-88,98,188,224-304
+frontend/src/app/types.d.ts
+  s_e365e0923fd2ce::t_9b7e832904ede1 1-10
+frontend/src/common/localization-contract.ts
+  s_e365e0923fd2ce::t_718a9488235638 1-3
+frontend/src/common/page-contract.ts
+  s_e365e0923fd2ce::t_78bc621b771f2b 1-2
+frontend/src/main/appPaths.ts
+  s_86d200683c08b7::t_8eab463f8702c6 7,33,45
+frontend/src/main/bizModules/addon.ts
+  s_e365e0923fd2ce::t_2e1622d66f4245 3-5,8-33
+frontend/src/main/bizModules/bizModules.ts
+  s_e365e0923fd2ce::t_80e1278907d710 1-95
+frontend/src/main/bizModules/index.ts
+  s_e365e0923fd2ce::t_cf27eb799924da 1-3
+frontend/src/main/bizModules/moduleRegistry.ts
+  s_e365e0923fd2ce::t_3f36f687d72781 1-6,8-20
+frontend/src/main/infrastructure/configuration/store.ts
+  s_e365e0923fd2ce::t_a642a7c7607aad 1-3,5-22,26-27,30-39,42-44,47-54,58
+frontend/src/main/infrastructure/sanitizeLog.ts
+  s_968ac81cef78da::t_ec5703a88ac809 1,3-4,6-9,11,13-15,17-25,27,30-46
+frontend/src/main/main.ts
+  s_e365e0923fd2ce::t_c85f50eec43f44 1,3,6-7,9
+frontend/src/main/mediaService/addon.ts
+  s_968ac81cef78da::t_b5db0ccd7bba86 1,3-13,16-27,30,33-40,43,45-76
+frontend/src/main/mediaService/mediaService.ts
+  s_e365e0923fd2ce::t_0d0e2d87af95aa 1-11,14-15,17-20,23-26,29-31,34-36,39-40,43-45,48,51-53,58-59,62-69,71-74,77,79,81-82,86
+frontend/src/main/mediaService/mediaStatusService.ts
+  s_e365e0923fd2ce::t_bc71602e921106 1-14
+frontend/src/main/mediaService/nativeWindowService.ts
+  s_968ac81cef78da::t_44e38bc419fdc4 2-17,25-26,30-33,35-40,42,45-51,54-55,58,60-61,64-65,69-74,77-84,87-95,98-102,105-110,113-118,121-125,128-129,132-134,137-138,141-144
+frontend/src/main/mediaService/streamPreviewService.ts
+  s_e365e0923fd2ce::t_4885691815a6ee 1-4,6-7,12-26,29-31,33-38,40-89,91-94,97-106,109-122,124-163,167-188,191-194,196-213,216,218-250
+frontend/src/main/mediaService/types.ts
+  s_e365e0923fd2ce::t_81b5f794da4939 1-3
+frontend/src/main/window/browserView.ts
+  s_e365e0923fd2ce::t_4e4f932b5e0b91 1-95
+frontend/src/main/window/mainWindow.ts
+  s_e365e0923fd2ce::t_606613872d4679 6,8,12,47,56,60-63,67-68,139
+frontend/src/main/window/popupWindow.ts
+  s_e365e0923fd2ce::t_5098566266cba7 1-4,6-9,11-19,21-37,39-41,43-87,89,91-92,94-110,113-114,118,121-122,124-127,129-134,136,138-139,142-147,149-151,157-158,160,162-163,165,168
+frontend/tsconfig.json
+  s_e365e0923fd2ce::t_2bd6f6a99e9fea 6,15
+scripts/build.py
+  s_e365e0923fd2ce::t_1706662f862839 2,31,33,47,156,315,323,357-401,424
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "11cd91b52d6b7c16c70b76eb3087d2a3942dd3b7",
+  "prompts": {},
+  "logical_commit_id": "11cd91b52d6b7c16c70b76eb3087d2a3942dd3b7",
+  "sessions": {
+    "s_2a7c40d9bf9780": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13a15-97a3-7663-b654-9a83fa06c4bf",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "zhouxingbang1 <zhouxingbang1@bigo.sg>"
+    },
+    "s_433fbf492f80b8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13342-d451-7ea3-a5e7-84230bfb0153",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "zhouxingbang1 <zhouxingbang1@bigo.sg>"
+    },
+    "s_5354ed16d5d70b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13a5f-c39e-7eb1-95d8-1d683b92bcb2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "zhouxingbang1 <zhouxingbang1@bigo.sg>"
+    },
+    "s_843c6c457d16bf": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13e5f-fc41-7402-9caa-769c281b16b6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "zhouxingbang1 <zhouxingbang1@bigo.sg>"
+    },
+    "s_86d200683c08b7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13321-becd-7500-9040-a044907f9b5f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "zhouxingbang1 <zhouxingbang1@bigo.sg>"
+    },
+    "s_9297f10ab8e875": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1397d-269d-7f33-aa5f-acab674817ab",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "zhouxingbang1 <zhouxingbang1@bigo.sg>"
+    },
+    "s_968ac81cef78da": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13ac5-5e96-78d2-a638-dc2d82c60554",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "zhouxingbang1 <zhouxingbang1@bigo.sg>"
+    },
+    "s_de1379710453d6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13441-133e-7ec3-9b6c-cfc473d8b55a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "zhouxingbang1 <zhouxingbang1@bigo.sg>"
+    },
+    "s_e365e0923fd2ce": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13ed4-2e47-7430-a203-18aa3bac31da",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "zhouxingbang1 <zhouxingbang1@bigo.sg>"
+    }
+  }
+}
