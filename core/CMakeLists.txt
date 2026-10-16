@@ -1,57 +1,56 @@
 cmake_minimum_required(VERSION 3.25)
 
-option(LIVESTREAMER_SCHEMA_ONLY "Configure only the schema generation target" OFF)
-if(LIVESTREAMER_SCHEMA_ONLY)
-  project(live-streamer VERSION 1.0.0 LANGUAGES NONE)
+option(BIGOSTREAMER_SCHEMA_ONLY "Configure only the schema generation target" OFF)
+if(BIGOSTREAMER_SCHEMA_ONLY)
+  project(bigostreamer VERSION 1.0.0 LANGUAGES NONE)
 else()
-  project(live-streamer VERSION 1.0.0 LANGUAGES CXX)
+  project(bigostreamer VERSION 1.0.0 LANGUAGES C CXX)
 endif()
 
-get_filename_component(LIVESTREAMER_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+get_filename_component(BIGOSTREAMER_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(FlatBuffers)
 include(Spdlog)
 
-if(LIVESTREAMER_SCHEMA_ONLY)
+if(BIGOSTREAMER_SCHEMA_ONLY)
   include(Schemas)
   return()
 endif()
 
-livestreamer_add_flatbuffers_headers()
+bigostreamer_add_flatbuffers_headers()
 
-# Windows 资源编译（.rc -> PE 资源，media-service 的图标走这里）
+# Windows resource compile: .rc -> PE resource, used by media-service icon.
 if(WIN32)
   enable_language(RC)
 endif()
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-livestreamer_add_spdlog()
+bigostreamer_add_spdlog()
 
-# 只作用于本项目自己的 target，不影响 FetchContent 拉进来的第三方工程
-add_library(livestreamer_options INTERFACE)
-target_compile_definitions(livestreamer_options INTERFACE UNICODE _UNICODE NOMINMAX WIN32_LEAN_AND_MEAN)
+# Applies only to this project own targets; does not affect FetchContent third-party projects.
+add_library(bigostreamer_options INTERFACE)
+target_compile_definitions(bigostreamer_options INTERFACE UNICODE _UNICODE NOMINMAX WIN32_LEAN_AND_MEAN)
 if (MSVC)
-  target_compile_options(livestreamer_options INTERFACE /utf-8 /W4)
+  target_compile_options(bigostreamer_options INTERFACE /utf-8 /W4)
 endif()
 
 add_subdirectory(utils)
 add_subdirectory(media-service)
 if(WIN32)
-  add_subdirectory(node-streampreview)
+  # Integration fixtures (scripts/biz-tests, scripts/native-tests) were removed with the refactor;
+  # keep the option for re-enabling them later, but do not default to ON.
+  option(BIGOSTREAMER_BUILD_INTEGRATION_TESTS "Build native addon integration fixtures" OFF)
+  add_subdirectory(node-bizmodules)
+  add_subdirectory(node-media-service)
 endif()
 
-# 统一输出目录：可执行文件都落到仓库根的 build/bin/<Config>（多配置生成器自动追加配置名，
-# 单配置生成器如 Ninja 则直接是 build/bin）。静态库和中间产物留在各自的 build/core 子目录里。
-get_filename_component(LIVESTREAMER_OUTPUT_DIR "${LIVESTREAMER_ROOT}/build/bin" ABSOLUTE)
+# Unified output directory: executables go to build/bin/<Config> at repo root
+# (multi-config generators append the config name; single-config like Ninja use build/bin directly).
+get_filename_component(BIGOSTREAMER_OUTPUT_DIR "${BIGOSTREAMER_ROOT}/build/bin" ABSOLUTE)
 
-foreach(target liveStreamer mediaService)
-  # liveStreamer（宿主）尚未创建，先跳过，等目标就位后自动生效
-  if(TARGET ${target})
-    set_target_properties(${target} PROPERTIES
-      RUNTIME_OUTPUT_DIRECTORY ${LIVESTREAMER_OUTPUT_DIR}
-      PDB_OUTPUT_DIRECTORY ${LIVESTREAMER_OUTPUT_DIR})
-  endif()
-endforeach()
+set_target_properties(mediaService PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY ${BIGOSTREAMER_OUTPUT_DIR}
+  PDB_OUTPUT_DIRECTORY ${BIGOSTREAMER_OUTPUT_DIR})

@@ -1,0 +1,46 @@
+// NativeWindowService：media-service 侧按 id 管理原生可视窗口。
+// 方法名 = Args 表名去掉 Args 后首字母小写；addon 侧生成同名映射类。
+namespace services;
+
+table CreateArgs {
+  id: uint;             // addon 本地分配的控件 id（0 = 主控件）
+  host: ulong;          // 消费端主窗口原生句柄（Windows 为 HWND）
+  host_visible: bool;
+}
+table CreateResult {}
+table SetRectArgs {
+  id: uint;
+  x: int;
+  y: int;
+  width: int;
+  height: int;
+}
+table SetRectResult {}
+table SetVisibleArgs {
+  id: uint;
+  visible: bool;
+}
+table SetVisibleResult {}
+table ReleaseArgs { id: uint; }
+table ReleaseResult {}
+table ReleaseAllArgs {}
+table ReleaseAllResult {}
+table RefreshArgs {
+  id: uint;
+  host: ulong;
+  host_visible: bool;
+}
+table RefreshResult {}
+root_type CreateArgs;
+root_type SetRectArgs;
+root_type SetVisibleArgs;
+root_type ReleaseArgs;
+root_type ReleaseAllArgs;
+root_type RefreshArgs;
+
+root_type CreateResult;
+root_type SetRectResult;
+root_type SetVisibleResult;
+root_type ReleaseResult;
+root_type ReleaseAllResult;
+root_type RefreshResult;

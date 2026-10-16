@@ -1,5 +1,5 @@
 @echo off
-rem live-streamer: one-click build for Windows x64.
+rem bigostreamer: one-click build for Windows x64.
 rem Builds the C++ core (build/core) and the Electron app, same as:
 rem     python scripts\build.py --generator "Visual Studio 17 2022" --toolset v143 [--config Debug^|Release]
 setlocal
@@ -30,6 +30,6 @@ if not "%CODE%"=="0" (
   echo [build-win-x84_64] OK
 )
 
-rem 双击运行时停一下方便看结果，带参数运行（终端 / CI）不停
+rem Pause after a double-click launch; command-line arguments disable the pause.
 if "%~1"=="" pause
 exit /b %CODE%

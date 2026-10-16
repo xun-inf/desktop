@@ -1,0 +1,32 @@
+// StreamPreviewService：共享纹理预览的生命周期。
+// 帧消费走 Electron sharedTexture，本服务只管理预览对象与帧归还。
+namespace services;
+
+table CreateStreamPreviewArgs { id: uint; }
+table CreateStreamPreviewResult {}
+table ReleaseStreamPreviewArgs { id: uint; }
+table ReleaseStreamPreviewResult {}
+table ReleaseVideoFrameArgs {
+  id: uint;
+  token: ulong;
+}
+table ReleaseVideoFrameResult {}
+
+// 事件表：服务端推送帧发布通知（当前帧直接走 Electron sharedTexture，
+// 事件机制就位后由服务端 emitEvent 填充）。
+table FrameEvent {
+  id: uint;
+  token: ulong;
+  handle: ulong;
+  width: uint;
+  height: uint;
+  timestamp_us: long;
+}
+root_type CreateStreamPreviewArgs;
+root_type ReleaseStreamPreviewArgs;
+root_type ReleaseVideoFrameArgs;
+
+root_type FrameEvent;
+root_type CreateStreamPreviewResult;
+root_type ReleaseStreamPreviewResult;
+root_type ReleaseVideoFrameResult;

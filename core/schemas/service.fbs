@@ -1,0 +1,59 @@
+// 传输层协议：跨所有 service 复用，总表不随业务增长。
+// 传输：Named Pipe 字节流，每条消息 = 4 字节小端长度前缀 + FlatBuffer 字节
+// type：MessageType 枚举（None=0 / InvokeReq=1 / InvokeRsp=2 / Event=3）
+//
+// 连接生命周期（SessionService，服务端内置服务，类名即 service_id）：
+//   客户端连接后必须先 hello 握手（此时 InvokeReq.session_id 必须为 0）；
+//   服务端在 HelloResult 下发 session_id 会话令牌，客户端后续每个
+//   InvokeReq 原样回显，服务端按令牌校验请求归属当前会话。
+namespace services;
+
+enum MessageType : byte { None = 0, InvokeReq = 1, InvokeRsp = 2, Event = 3 }
+
+table InvokeReq {
+  type: MessageType;
+  service_id: string;   // C++ 类名，如 "NativeWindowService"
+  method: string;       // 方法名，如 "create"
+  request_id: ulong;
+  session_id: ulong;    // 回显服务端下发的会话令牌；0 = 未握手（hello 必须为 0）
+  args: [ubyte];        // 方法参数表字节（如 CreateArgs）
+}
+
+table InvokeRsp {
+  type: MessageType;
+  service_id: string;
+  request_id: ulong;
+  session_id: ulong;    // 回显当前会话（hello 回执携带新下发的令牌）
+  success: bool;
+  message: string;
+  result: [ubyte];      // 返回表字节（如 CreateResult）
+}
+
+table ServiceEvent {
+  type: MessageType;
+  service_id: string;
+  event: string;        // 事件名，如 "frame"
+  payload: [ubyte];     // 事件表字节
+}
+
+// SessionService 生命周期表：hello 握手授予会话令牌，shutdown 请求服务端退出。
+table HelloArgs {
+  version: uint;        // 客户端协议版本
+}
+table HelloResult {
+  session_id: ulong;    // 服务端下发的会话令牌；0 = 未完成握手
+  compatible: bool;     // 版本兼容
+}
+table ShutdownArgs {}
+table ShutdownResult {}
+
+root_type InvokeReq;
+
+root_type InvokeRsp;
+root_type ServiceEvent;
+
+root_type HelloArgs;
+root_type ShutdownArgs;
+
+root_type HelloResult;
+root_type ShutdownResult;

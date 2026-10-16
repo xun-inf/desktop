@@ -24,3 +24,7 @@ __pycache__/
 *.user
 
 tests/
+
+# Electron build manifests
+!electron/package.json
+!electron/package-lock.json

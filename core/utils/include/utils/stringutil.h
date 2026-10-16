@@ -5,6 +5,12 @@
 namespace liveutils
 {
 
+#if defined(_WIN32)
+// Convert Windows UTF-16 and UTF-8 without depending on the active code page.
+std::wstring utf8ToWide(const std::string& text);
+std::string wideToUtf8(const std::wstring& text);
+#endif
+
 // Windows 错误码转换为 UTF-8 文本；其他平台保留数字错误码。
 std::string lastErrorMessage(unsigned long error_code);
 

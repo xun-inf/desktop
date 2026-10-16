@@ -1,11 +1,13 @@
-#include "application.h"
+﻿#include "application.h"
 
-#include "ipchandlers/ipchandlers.h"
 #include "base/logger.h"
-#include "utils/scopeguard.h"
+#include "services/register.h"
 
 #include <cstdio>
-#include <string>
+
+#if defined(_WIN32)
+#include <windows.h>
+#endif
 
 namespace
 {
@@ -19,7 +21,6 @@ MediaServiceApplication* MediaServiceApplication::s_instance = nullptr;
 MediaServiceApplication::MediaServiceApplication(int argc, char** argv)
     : m_config(argc, argv)
     , m_ipcServer([this] { m_eventLoop.requestQuit(); })
-    , m_streamPreviewMgr(m_ipcServer)
 {
     mediaservice::logger().setLogFile(m_config.logPath());
     MediaServiceApplication::s_instance = this;
@@ -45,24 +46,25 @@ bool MediaServiceApplication::initialize()
     {
         return true;
     }
-    auto cleanupGuard = liveutils::makeScopeGuard([this] { cleanup(); });
     if (!m_eventLoop.initialize())
     {
         mediaservice::logger().logError(kComponent, "failed to initialize event loop");
         return false;
     }
-    if (!m_nativeWindowMgr.initialize())
+
+    // Service 管理层：统一注册接口（services::registerAll）构造并注册全部业务 Service。
+    m_serviceRegistry.reset(new ServiceRegistry());
+    if (!services::registerAll(*m_serviceRegistry, &m_ipcServer, &m_eventLoop))
     {
-        mediaservice::logger().logError(kComponent, "failed to initialize native window manager");
-        return false;
-    }
-    if (!registerIpcHandlers(m_ipcServer))
-    {
+        mediaservice::logger().logError(kComponent, "failed to register services");
         return false;
     }
 
+    // 路由：InvokeReq -> ServiceRegistry；UI 线程任务队列 -> EventLoop。
+    m_ipcServer.setRegistry(m_serviceRegistry.get());
+    m_ipcServer.setEventLoop(&m_eventLoop);
+
     m_initialized = true;
-    cleanupGuard.dismiss();
     return true;
 }
 
@@ -73,9 +75,6 @@ bool MediaServiceApplication::exec()
         mediaservice::logger().logError(kComponent, "media service not initialized");
         return false;
     }
-
-    // 启动失败或抛出异常时，保证清理 IPC 和 UI 资源。
-    auto cleanupGuard = liveutils::makeScopeGuard([this] { cleanup(); });
 
     const std::string pipeName = m_config.pipeName();
     if (!m_ipcServer.start(pipeName))
@@ -90,17 +89,19 @@ bool MediaServiceApplication::exec()
 
     const bool succeeded = m_eventLoop.run();
     cleanup();
-    cleanupGuard.dismiss();
     mediaservice::logger().logInfo(kComponent, "media service stopped");
     return succeeded;
 }
 
 void MediaServiceApplication::cleanup()
 {
-    // 停止并等待 IPC 后，再由 UI 线程关闭窗口和清空事件循环。
+    // 先停 IPC（等待接收线程退出），再由注册表统一收口各 Service 生命周期，最后停事件循环。
     m_ipcServer.stop();
-    m_streamPreviewMgr.closeAll();
-    m_nativeWindowMgr.closeAll();
+    if (m_serviceRegistry != nullptr)
+    {
+        m_serviceRegistry->closeAll();
+    }
     m_eventLoop.stop();
+    m_serviceRegistry.reset();
     m_initialized = false;
 }

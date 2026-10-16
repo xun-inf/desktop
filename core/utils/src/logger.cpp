@@ -1,11 +1,13 @@
 #include "utils/logger.h"
+#include "utils/stringutil.h"
 
 #if defined(_WIN32)
 #include <windows.h>
+#elif defined(__linux__)
+#include <unistd.h>
 #endif
 
 #include <exception>
-#include <filesystem>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -67,26 +69,36 @@ std::string processName()
         const DWORD length = ::GetModuleFileNameW(nullptr, path.data(), static_cast<DWORD>(path.size()));
         if (length == 0)
         {
-            return "live-streamer";
+            return "bigostreamer";
         }
         if (length < path.size())
         {
-            const auto name = std::filesystem::path(path.data(), path.data() + length).filename().u8string();
-            return std::string(name.begin(), name.end());
+            const std::wstring fullPath(path.data(), length);
+            const std::wstring::size_type separator = fullPath.find_last_of(L"/\\");
+            const std::wstring name = separator == std::wstring::npos ? fullPath : fullPath.substr(separator + 1);
+            return wideToUtf8(name);
         }
         path.resize(path.size() * 2);
     }
 #elif defined(__linux__)
-    std::error_code error;
-    const auto path = std::filesystem::read_symlink("/proc/self/exe", error);
-    if (!error)
+    std::vector<char> path(256);
+    for (;;)
     {
-        const auto name = path.filename().u8string();
-        return std::string(name.begin(), name.end());
+        const ssize_t length = ::readlink("/proc/self/exe", path.data(), path.size());
+        if (length < 0)
+        {
+            return "bigostreamer";
+        }
+        if (static_cast<std::size_t>(length) < path.size())
+        {
+            const std::string fullPath(path.data(), static_cast<std::size_t>(length));
+            const std::string::size_type separator = fullPath.find_last_of('/');
+            return separator == std::string::npos ? fullPath : fullPath.substr(separator + 1);
+        }
+        path.resize(path.size() * 2);
     }
-    return "live-streamer";
 #else
-    return "live-streamer";
+    return "bigostreamer";
 #endif
 }
 
@@ -99,13 +111,16 @@ std::unique_ptr<spdlog::logger> createLogger(const std::string& logFile)
 #endif
     if (!logFile.empty())
     {
-        // char8_t 明确按 UTF-8 解码；native() 仅在 Windows 下转换成宽字符路径。
-        const std::filesystem::path path(std::u8string(logFile.begin(), logFile.end()));
+#if defined(_WIN32)
+        const std::wstring path = utf8ToWide(logFile);
+#else
+        const std::string& path = logFile;
+#endif
         sinks.emplace_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-            path.native(), kMaxLogFileSize, kMaxLogFiles));
+            path, kMaxLogFileSize, kMaxLogFiles));
     }
 
-    auto logger = std::make_unique<spdlog::logger>(processName(), sinks.begin(), sinks.end());
+    std::unique_ptr<spdlog::logger> logger(new spdlog::logger(processName(), sinks.begin(), sinks.end()));
     logger->set_pattern("%Y-%m-%d %H:%M:%S [%n] %v");
     logger->set_level(spdlog::level::debug);
     logger->flush_on(spdlog::level::debug);
@@ -121,7 +136,7 @@ public:
     std::unique_ptr<spdlog::logger> logger = createLogger({});
 };
 
-Logger::Logger(const std::string& path) : d_ptr(std::make_unique<LoggerPrivate>())
+Logger::Logger(const std::string& path) : d_ptr(new LoggerPrivate())
 {
     if (!path.empty())
     {

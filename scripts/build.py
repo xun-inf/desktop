@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""live-streamer 构建脚本：原生侧（C++/CMake）+ Electron（tsc + Vite）。
+"""bigostreamer 构建脚本：原生侧（C++/CMake）+ Electron（tsc + Vite）。
 
 用法：
     python scripts/build.py [--config Debug]
@@ -28,9 +28,9 @@ ELECTRON_DIR = ROOT / "electron"
 CONFIG_DIR = ROOT / "config"
 BIN_DIR = ROOT / "build" / "bin"
 
-# 产物里的 UI 进程名：Electron 运行时本体改叫 live-streamer（electron-packager 同款做法），
+# 产物里的 UI 进程名：Electron 运行时本体改叫 bigostreamer（electron-packager 同款做法），
 # 进程名 / 任务栏 / 文件都和产品对得上；开发模式仍用 node_modules 里的 electron.exe
-UI_EXE_NAME = "live-streamer"
+UI_EXE_NAME = "bigostreamer"
 LOG_DIR = ROOT / "build" / "logs"
 
 # rcedit：改 UI 进程 exe 的 PE 资源（图标 / 版本信息）。跑的是官方运行时本体，
@@ -44,7 +44,7 @@ RCEDIT_SHA256 = "3e7801db1a5edbec91b49a24a094aad776cb4515488ea5a4ca2289c400eade2
 RCEDIT_DIR = ROOT / "core" / "thirdparty" / "rcedit"
 
 # 写进 exe 资源的产品名（窗口标题见 electron/src/main/main.ts）
-APP_PRODUCT_NAME = "LIVE Streamer"
+APP_PRODUCT_NAME = "BIGO Streamer"
 APP_COMPANY_NAME = "ZXB"
 
 IS_WINDOWS = os.name == "nt"
@@ -153,7 +153,7 @@ def prepare_electron() -> None:
     required_packages = ("electron", "typescript", "vite", "@vitejs/plugin-react", "react", "react-dom")
     if any(not (ELECTRON_DIR / "node_modules" / package / "package.json").exists()
            for package in required_packages):
-        run_command([npm, "install"], cwd=ELECTRON_DIR)
+        run_command([npm, "ci"], cwd=ELECTRON_DIR)
 
     binary = electron_binary()
     if not binary.exists():
@@ -312,7 +312,7 @@ def stage(config: str) -> Path:
     产物目录（build/bin/<config>）就是最终的可分发目录：
         build/bin/<config>/
         ├── media-service.exe        # CMake 直接构建在这里（PE 图标带 config/app.ico）
-        ├── live-streamer.exe + Chromium 运行时文件  # electron.exe 改的名，摊在根下（rcedit 换过图标/版本）
+        ├── bigostreamer.exe + Chromium 运行时文件  # electron.exe 改的名，摊在根下（rcedit 换过图标/版本）
         ├── <config/bin 里的东西>     # settings.ini 等直接摊在根下，不留 bin/ 这一层
         ├── resources/               # Electron 自己的目录，只放它自己的东西
         │   ├── app/                 # 我们的 Electron 应用（main.js 按 ../../src 找 preload）
@@ -320,7 +320,7 @@ def stage(config: str) -> Path:
         └── logs/                    # 首次运行时自动创建
 
     config/ 本身不进产物：图标是构建期输入（.rc / rcedit 用），只有 bin/ 是运行时文件。
-    启动：live-streamer.exe resources/app
+    启动：bigostreamer.exe resources/app
     """
     binary = target_binary("media-service", config)
     if not binary.exists():
@@ -354,12 +354,51 @@ def stage(config: str) -> Path:
     app.mkdir(parents=True, exist_ok=True)
     shutil.copy2(ELECTRON_DIR / "package.json", app / "package.json")
     copy_tree(ELECTRON_DIR / "dist", app / "dist")
-    copy_tree(ELECTRON_DIR / "src" / "preload", app / "src" / "preload")
-    # React 已打进 dist/app；保留协议编码及 Electron remote 的运行时依赖。
-    copy_tree(
-        ELECTRON_DIR / "node_modules" / "flatbuffers",
-        app / "node_modules" / "flatbuffers",
-    )
+    # Generated protocol JS is used by native-tests, not the distributed UI.
+    legacy_protocol_scripts = app / "dist" / "common" / "ipcs"
+    if legacy_protocol_scripts.is_dir():
+        legacy_protocol_scripts.resolve().relative_to(target.resolve())
+        shutil.rmtree(legacy_protocol_scripts)
+    for legacy_module in (
+        "mediaservice/IpcBuffer", "mediaservice/IpcClient", "mediaservice/IpcHandler",
+        "mediaservice/NativeWindow", "mediaservice/streampreview/TextureHandle",
+        "ipchandlers/registerHandlers", "ipchandlers/StreamPreviewHandler",
+        "ipcmain/registerHandlers", "ipcmain/channels", "mediaService/ServiceProxy",
+        "bizModules/ModuleProxy", "infrastructure/configurationService", "infrastructure/configurationStore",
+    ):
+        for suffix in (".js", ".js.map"):
+            legacy_script = app / "dist" / "main" / (legacy_module + suffix)
+            if legacy_script.is_file():
+                legacy_script.unlink()
+    # Sandbox preload is a self-contained TS bundle in dist/preload; never stage source imports.
+    legacy_preload = app / "src" / "preload"
+    if legacy_preload.is_dir():
+        legacy_preload.resolve().relative_to(target.resolve())
+        shutil.rmtree(legacy_preload)
+    for legacy_name in ("ipc-contract",):
+        for suffix in (".js", ".js.map"):
+            legacy_contract = app / "dist" / "common" / (legacy_name + suffix)
+            if legacy_contract.is_file():
+                legacy_contract.unlink()
+    addon = target / "node-media-service.node"
+    if not addon.is_file():
+        raise SystemExit("[build] 缺少构建产物: {0}".format(addon))
+    business_addon = target / "node-bizmodules.node"
+    if not business_addon.is_file():
+        raise SystemExit("[build] Missing business addon: {0}".format(business_addon))
+    shutil.copy2(CORE_DIR / "node-bizmodules" / "index.d.ts", target / "node-bizmodules.d.ts")
+
+    # Stage public declarations beside the addon; remove the obsolete module.
+    shutil.copy2(CORE_DIR / "node-media-service" / "index.d.ts", target / "node-media-service.d.ts")
+    for legacy_name in ("node-streampreview.node", "node-streampreview.pdb"):
+        legacy_binary = target / legacy_name
+        if legacy_binary.is_file():
+            legacy_binary.unlink()
+    legacy_protocol = app / "node_modules" / "flatbuffers"
+    if legacy_protocol.is_dir():
+        legacy_protocol.resolve().relative_to(target.resolve())
+        shutil.rmtree(legacy_protocol)
+    # React is bundled into dist/app; the addon owns protocol parsing. Keep Electron remote.
     copy_tree(
         ELECTRON_DIR / "node_modules" / "@electron" / "remote",
         app / "node_modules" / "@electron" / "remote",
@@ -382,7 +421,7 @@ def build_all(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="live-streamer 构建脚本")
+    parser = argparse.ArgumentParser(description="bigostreamer 构建脚本")
     parser.add_argument("--config", default="Debug", help="Debug / Release")
     parser.add_argument(
         "--generator", default="", help="CMake generator，例如 Visual Studio 17 2022"

@@ -8,9 +8,63 @@
 
 #include <cstdint>
 #include <cstdio>
+#include <limits>
+#include <stdexcept>
 
 namespace liveutils
 {
+
+#if defined(_WIN32)
+std::wstring utf8ToWide(const std::string& text)
+{
+    if (text.empty())
+    {
+        return {};
+    }
+    if (text.size() > static_cast<std::size_t>(std::numeric_limits<int>::max()))
+    {
+        throw std::length_error("UTF-8 text is too long");
+    }
+    const int length = static_cast<int>(text.size());
+    const int size = ::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.data(), length, nullptr, 0);
+    if (size == 0)
+    {
+        throw std::runtime_error("failed to decode UTF-8 text");
+    }
+    std::wstring result(static_cast<std::size_t>(size), L'\0');
+    if (::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, text.data(), length, &result[0], size) != size)
+    {
+        throw std::runtime_error("failed to decode UTF-8 text");
+    }
+    return result;
+}
+
+std::string wideToUtf8(const std::wstring& text)
+{
+    if (text.empty())
+    {
+        return {};
+    }
+    if (text.size() > static_cast<std::size_t>(std::numeric_limits<int>::max()))
+    {
+        throw std::length_error("UTF-16 text is too long");
+    }
+    const int length = static_cast<int>(text.size());
+    const int size = ::WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, text.data(), length,
+                                         nullptr, 0, nullptr, nullptr);
+    if (size == 0)
+    {
+        throw std::runtime_error("failed to encode UTF-16 text");
+    }
+    std::string result(static_cast<std::size_t>(size), '\0');
+    if (::WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, text.data(), length,
+                              &result[0], size, nullptr, nullptr) != size)
+    {
+        throw std::runtime_error("failed to encode UTF-16 text");
+    }
+    return result;
+}
+#endif
 
 std::string hResultToText(long hresult)
 {
@@ -44,7 +98,7 @@ std::string lastErrorMessage(unsigned long error_code)
         {
             message.resize(static_cast<size_t>(size));
             if (::WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, buffer, static_cast<int>(length),
-                                     message.data(), size, nullptr, nullptr) != size)
+                                     &message[0], size, nullptr, nullptr) != size)
             {
                 message.clear();
             }

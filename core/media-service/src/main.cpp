@@ -16,10 +16,7 @@ namespace
 int runApplication(int argc, char** argv)
 {
     MediaServiceApplication app(argc, argv);
-    if (!app.initialize())
-    {
-        return 1;
-    }
+    if (!app.initialize()) return 1;
     return app.exec() ? 0 : 1;
 }
 
@@ -28,7 +25,7 @@ int runApplication(int argc, char** argv)
 #if defined(_WIN32)
 int wmain(int argc, wchar_t** argv)
 {
-    std::vector<std::string> utf8Args;
+    std::vector<std::vector<char>> utf8Args;
     utf8Args.reserve(argc);
     for (int i = 0; i < argc; ++i)
     {
@@ -40,20 +37,19 @@ int wmain(int argc, wchar_t** argv)
             return 1;
         }
 
-        std::string arg(static_cast<std::size_t>(size), '\0');
+        std::vector<char> arg(static_cast<std::size_t>(size), '\0');
         if (::WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, argv[i], -1,
                                  arg.data(), size, nullptr, nullptr) != size)
         {
             mediaservice::logger().logError("app", "failed to encode command-line arguments as UTF-8");
             return 1;
         }
-        arg.resize(static_cast<std::size_t>(size - 1));
         utf8Args.push_back(std::move(arg));
     }
 
     std::vector<char*> utf8Argv;
     utf8Argv.reserve(static_cast<std::size_t>(argc) + 1);
-    for (std::string& arg : utf8Args)
+    for (std::vector<char>& arg : utf8Args)
     {
         utf8Argv.push_back(arg.data());
     }
